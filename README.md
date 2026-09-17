@@ -1,0 +1,25 @@
+Szolgáltatás
+
+- [ ] Nginx Proxy
+- [x] Portainer
+- [ ] Watchtower	
+- [x] Dozzle	
+- [x] Uptime Kuma	
+- [x] mariadb
+- [x] phpmyadmin
+- [x] postgresql
+- [x] pgadmin4
+- [ ] grafana
+- [ ] prometheus
+- [ ] loki
+- [ ] cadvisor
+- [ ] node-exporter
+- [ ] Syncthing
+- [ ] File Browser
+- [ ] Vaultwarden
+- [ ] Mealie
+- [ ] Jellyfin
+- [ ] Plex
+- [ ] Paperless-ngx
+- [ ] Gitea
+- [ ] Alertmanager
