@@ -21,5 +21,5 @@ Szolgáltatás
 - [ ] Jellyfin
 - [ ] Plex
 - [ ] Paperless-ngx
-- [ ] Gitea
+- [x] Gitea
 - [ ] Alertmanager
