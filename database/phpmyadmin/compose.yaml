@@ -1,0 +1,20 @@
+services:
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+
+    ports:
+      - "8082:80"
+
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    
+    networks:
+      - database-net
+
+networks:
+  database-net:
+    name: database-net
+    external: true

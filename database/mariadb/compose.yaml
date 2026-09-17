@@ -1,0 +1,25 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+
+    env_file:
+      - mariadb.env
+    
+    volumes:
+      - mariadb_mariadb_data:/var/lib/mysql
+
+    networks:
+      - database-net
+
+    ports:
+      - "127.0.0.1:3306:3306"
+    
+volumes:
+  mariadb_mariadb_data:
+
+networks:
+  database-net:
+    name: database-net
+    external: true
