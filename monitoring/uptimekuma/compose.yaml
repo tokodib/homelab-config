@@ -13,6 +13,7 @@ services:
 
     networks:
       - database-net
+      - monitoring
 
 volumes:
   uptime_kuma_data:
@@ -23,3 +24,7 @@ networks:
   database-net:
     external: true
     name: database-net
+
+  monitoring:
+    external: true
+    name: monitoring

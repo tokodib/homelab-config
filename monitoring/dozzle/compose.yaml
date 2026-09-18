@@ -8,6 +8,14 @@ services:
     ports:
       - 8888:8080
 
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true
+    name: monitoring
+
 volumes:
   dozzle_data:
     name: dozzle_data

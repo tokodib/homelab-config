@@ -13,3 +13,11 @@ services:
       - 80:80
       - 443:443
     restart: unless-stopped
+
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true
+    name: monitoring    

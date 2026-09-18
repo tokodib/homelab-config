@@ -11,7 +11,16 @@ services:
       - ./prometheus:/etc/prometheus
       - prom_data:/prometheus
 
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true
+    name: monitoring
+    
 volumes:
   prom_data:
     name: prom_data
     external: true
+
