@@ -9,11 +9,11 @@ Szolgáltatás
 - [x] phpmyadmin
 - [x] postgresql
 - [x] pgadmin4
-- [ ] grafana
-- [ ] prometheus
+- [x] grafana
+- [x] prometheus
 - [ ] loki
-- [ ] cadvisor
-- [ ] node-exporter
+- [x] cadvisor
+- [x] node-exporter
 - [ ] Syncthing
 - [ ] File Browser
 - [ ] Vaultwarden
