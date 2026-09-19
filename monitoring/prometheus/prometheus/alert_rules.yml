@@ -11,3 +11,43 @@ groups:
           annotations:
             summary: "cAdvisor target is down"
             description: "cAdvisor has been unreachable for more than 1 minute."
+
+        - alert: NodeExporterDown
+          expr: up{job="node-exporter"} == 0
+          for: 1m
+      
+          labels:
+            severity: critical
+      
+          annotations:
+            summary: "Node Exporter target is down"
+            description: "Node Exporter has been unreachable for more than 1 minute."
+
+        - alert: HighMemoryUsage
+          expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory usage"
+            description: "Memory usage has been above 80% for more than 5 minutes."
+
+        - alert: LowDiskSpace
+          expr: (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay",mountpoint="/"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay",mountpoint="/"})) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Low disk space"
+            description: "Root filesystem usage has been above 80% for more than 5 minutes."
+
+        - alert: HighCPUUsage
+          expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage"
+            description: "CPU usage has been above 80% for more than 5 minutes."
+
+            
