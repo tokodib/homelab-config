@@ -1,0 +1,13 @@
+groups:
+    - name: example_alerts
+      rules:
+        - alert: cAdvisorDown
+          expr: up{job="cadvisor"} == 0
+          for: 1m
+      
+          labels:
+            severity: critical
+      
+          annotations:
+            summary: "cAdvisor target is down"
+            description: "cAdvisor has been unreachable for more than 1 minute."

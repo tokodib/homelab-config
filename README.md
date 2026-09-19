@@ -11,7 +11,7 @@ Szolgáltatás
 - [x] pgadmin4
 - [x] grafana
 - [x] prometheus
-- [ ] loki
+- [x] loki
 - [x] cadvisor
 - [x] node-exporter
 - [ ] Syncthing
@@ -23,3 +23,4 @@ Szolgáltatás
 - [ ] Paperless-ngx
 - [x] Gitea
 - [ ] Alertmanager
+- [x] promtail

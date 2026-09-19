@@ -14,3 +14,12 @@ scrape_configs:
   - job_name: cadvisor
     static_configs:
       - targets: ["192.168.1.225:8080"]
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'
+
+rule_files:
+  - 'alert_rules.yml'
