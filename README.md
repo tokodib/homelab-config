@@ -22,5 +22,6 @@ Szolgáltatás
 - [ ] Plex
 - [ ] Paperless-ngx
 - [x] Gitea
-- [ ] Alertmanager
+- [x] Alertmanager
 - [x] promtail
+- [ ] Blackbox Exporter

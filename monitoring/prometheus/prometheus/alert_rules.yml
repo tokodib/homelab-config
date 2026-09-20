@@ -49,5 +49,32 @@ groups:
           annotations:
             summary: "High CPU usage"
             description: "CPU usage has been above 80% for more than 5 minutes."
+    
+    - name: blackbox
+      rules:
+        - alert: GrafanaDown
+          expr: probe_success{job="blackbox"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Grafana is down"
+            description: "BlackBox Exporter cannot reach Grafana form more than 1 minute."
 
-            
+        - alert: MariaDBDown
+          expr: probe_success{job="blackbox-mariadb"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "MariaDB is down"
+            description: "BlackBox Exporter cannot reach MariaDB form more than 1 minute."
+
+        - alert: PostgreSQLDown    
+          expr: probe_success{job="blackbox-postgresql"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL is down"
+            description: "BlackBox Exporter cannot reach PostgreSQL form more than 1 minute."
