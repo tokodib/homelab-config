@@ -24,4 +24,4 @@ Szolgáltatás
 - [x] Gitea
 - [x] Alertmanager
 - [x] promtail
-- [ ] Blackbox Exporter
+- [x] Blackbox Exporter
