@@ -1,0 +1,68 @@
+# =========================
+# Editor / OS
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+
+# =========================
+# Terraform
+# =========================
+.terraform/
+
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Real variables may contain secrets
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Terraform plans
+*.tfplan
+*.plan
+
+# Terraform CLI config
+.terraformrc
+terraform.rc
+
+
+# =========================
+# Ansible
+# =========================
+ansible/inventory/hosts.yml
+!ansible/inventory/hosts.yml.example
+
+*.retry
+
+inventory.ini
+!inventory.ini.example
+
+host_vars/
+!ansible/host_vars/axion17.yml.example
+
+*vault_pass*
+.vault_pass
+vault_pass.txt
+
+
+# =========================
+# SSH keys
+# =========================
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+
+# =========================
+# Python
+# =========================
+.venv/
+__pycache__/
+*.pyc
