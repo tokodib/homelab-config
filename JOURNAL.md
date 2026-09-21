@@ -121,8 +121,34 @@ A konfigurációt később szeretném továbbfejleszteni úgy, hogy több VM és
 **Következő lépés:**
 
 - Terraform konfiguráció rendezése és verziókezelése
-- változók és `.tfvars` használata
-- érzékeny adatok elkülönítése
+- változók és `.tfvars` használata érzékeny adatok elkülönítése
 - Ansible kliens előkészítése
 - az új VM konfigurációjának automatizálása Ansible-lel
 
+# ANSIBLE
+
+- Létrehoztam az `inventory.ini` fájlt
+- `ansible-inventory -i inventory.ini --list` `ansible -i inventory.ini homelab --list-hosts` ellenőrizzük a beállításokat
+- `ansible -i inventory.ini homelab -m ping -u automation` ellenőrizzük, hogy az ansible tud-e kommunikálni a megadott számítógéppel SSH-n keresztül. A válasz:
+`homelab-server-01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}`
+- `ansible.cfg` fájl létrehozása, hogy ne kelljen állandóan gépelni az inventory és a felhasználói paramétereket mostmár `ansible homelab -m ping` elég.
+
+- Ad-hoc parancs használata: `ansible homelab -m command -a "Utasítás pl: df -h /"`
+- Beépített modulok (csak megjegyzésként):
+```text
+command   → parancs végrehajtása
+package   → csomagok kezelése
+service   → szolgáltatások kezelése
+user      → felhasználók kezelése
+file      → fájlok / könyvtárak kezelése
+copy      → fájl másolása
+template  → konfiguráció generálása
+apt       → Debian/Ubuntu csomagkezelés
+```
+- első playbook `playbooks/first.yml`

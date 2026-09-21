@@ -1,0 +1,8 @@
+---
+- name: My first Ansible playbook
+  hosts: homelab
+
+  tasks:
+    - name: Show hostname
+      ansible.builtin.command: hostname
+        
