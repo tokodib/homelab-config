@@ -7,9 +7,9 @@ services:
       - USER_GID=1000
       - GITEA__database__DB_TYPE=postgres
       - GITEA__database__HOST=postgresql:5432
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=gitea
+      - GITEA__database__NAME=GITEANAME
+      - GITEA__database__USER=GITEAUSER
+      - GITEA__database__PASSWD=GITEAPASSWD
     restart: always
     networks:
       - database-net
@@ -26,8 +26,7 @@ networks:
     name: database-net
     external: true
 
-#Kézzel létre kell hozni a meglévő postgresql-ben a 
-#usert, jelszót, adatbázist
-#Belépés a containerbe: docker exec -it postgresql psql -U postgres
+#MANUALLY NEED CREATING : user, password, database
+#Login in container: docker exec -it postgresql psql -U postgres
 #SQL: CREATE USER gitea WITH PASSWORD 'gitea';
 #     CREATE DATABASE gitea OWNER gitea;

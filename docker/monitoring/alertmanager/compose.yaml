@@ -8,7 +8,7 @@ services:
       - ./alertmanager.yml:/etc/alertmanager/config.yml:ro
     command: 
       - '--config.file=/etc/alertmanager/config.yml'
-      - '--web.external-url=http://192.168.1.225:9093'
+      - '--web.external-url=http://docker-host-ip:9093'
     restart: unless-stopped
     networks:
       - monitoring
