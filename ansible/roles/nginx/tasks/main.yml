@@ -1,0 +1,22 @@
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Ensure nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Configure nginx
+  ansible.builtin.template:
+    src: nginx-default.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify: Reload nginx
+
+- name: Show nginx message
+  ansible.builtin.debug:
+    var: nginx_message

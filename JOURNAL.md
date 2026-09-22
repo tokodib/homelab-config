@@ -161,3 +161,20 @@ apt       → Debian/Ubuntu csomagkezelés
 - Group Variables `group_vars/homelab.yml`
 - Host variables `host_vars/homelab-server-01.yml`
 **Megjegyzés:** A host változók felülírják (prioritásban) vannak a csoport változókhoz képest
+
+## ROLES
+- Példának az nginxet vesszük. Létrehozzuk a következő könyvtárstruktúrát: `mkdir -p roles/nginx/{tasks,handlers,templates,defaults}`
+
+```text
+roles
+└── nginx
+    ├── tasks
+    ├── handlers
+    ├── templates
+    └── defaults
+```
+- `tasks/` Mit csináljon a role - feladatok
+- `handlers/` A role handlerjei
+- `templates/` A role saját jinja template-jei
+- `defaults/` A role alapértelmezett változójai
+
