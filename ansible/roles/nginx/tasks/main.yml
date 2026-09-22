@@ -17,6 +17,3 @@
     dest: /etc/nginx/sites-available/default
   notify: Reload nginx
 
-- name: Show nginx message
-  ansible.builtin.debug:
-    var: nginx_message

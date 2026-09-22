@@ -177,4 +177,18 @@ roles
 - `handlers/` A role handlerjei
 - `templates/` A role saját jinja template-jei
 - `defaults/` A role alapértelmezett változójai
+- Létrehoztuk a role-ban a szükséges fájlokat:
 
+```text
+└── nginx
+    ├── defaults
+    │   └── main.yml
+    ├── handlers
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml
+    └── templates
+        └── nginx-default.conf.j2
+```
+
+- Figyelni a változók hol vannak defineálva, roles default változóit felülírja a group_vars azt pedig a host_vars
