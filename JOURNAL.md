@@ -156,3 +156,8 @@ apt       → Debian/Ubuntu csomagkezelés
 ### 2026-09-22 - Ansible - Server.yml
 - Játszogattam az ansible playbook lehetőségekkel
 - Létrehoztam templatet a dinamikus fájlkezeléshez
+- Ansible Variables
+- Handlers
+- Group Variables `group_vars/homelab.yml`
+- Host variables `host_vars/homelab-server-01.yml`
+**Megjegyzés:** A host változók felülírják (prioritásban) vannak a csoport változókhoz képest

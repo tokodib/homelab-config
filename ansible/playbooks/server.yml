@@ -1,7 +1,10 @@
 ---
-- name: My first Ansible playbook
+- name: Prepare homelab server
   hosts: homelab
   become: true
+
+#  vars:
+#    application_name: production-server
 
   tasks:
 #    - name: Show hostname
@@ -44,6 +47,7 @@
         content: |
           This server is managed by Ansible.
           Host: homelab-server-01
+          {{ application_name }}
         owner: automation
         group: automation
         mode: '0644'
@@ -55,4 +59,32 @@
         owner: automation
         group: automation
         mode: '0644'
+
+    - name: Create handler test file
+      ansible.builtin.copy:
+        content: |
+          Handler test
+          Application : {{ application_name }}
+        dest: /opt/homelab/handler-test.txt
+        owner: automation
+        group: automation
+        mode: '0644'
+      notify: Handler test
+
+    - name: Configure nginx
+      ansible.builtin.template:
+        src: nginx-default.conf.j2
+        dest: /etc/nginx/sites-available/default
+      notify: Reload nginx
+      
+  
+  handlers:
+    - name: Handler test
+      ansible.builtin.debug:
+        msg: "The handler was triggered!"
+
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
         
