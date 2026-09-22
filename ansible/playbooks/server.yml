@@ -1,32 +1,36 @@
 ---
 - name: My first Ansible playbook
   hosts: homelab
+  become: true
 
   tasks:
 #    - name: Show hostname
 #      ansible.builtin.command: hostname
       
-    - name: Install htop
-      become: true
+    - name: Install required packages
       ansible.builtin.apt:
-        name: htop
+        name: 
+          - htop
+          - curl
+          - nginx
+          - btop
+          - neofetch
+          - mc
         state: present
+        update_cache: true
 
     - name: Install nginx
-      become: true
       ansible.builtin.apt:
         name: nginx
         state: present
 
     - name: Ensure nginx is running
-      become: true
       ansible.builtin.service:
         name: nginx
         state: started
         enabled: true
 
     - name: Create application directory
-      become: true
       ansible.builtin.file:
         path: /opt/homelab
         state: directory

@@ -152,3 +152,7 @@ template  → konfiguráció generálása
 apt       → Debian/Ubuntu csomagkezelés
 ```
 - első playbook `playbooks/first.yml`
+
+### 2026-09-22 - Ansible - Server.yml
+- Játszogattam az ansible playbook lehetőségekkel
+- Létrehoztam templatet a dinamikus fájlkezeléshez
