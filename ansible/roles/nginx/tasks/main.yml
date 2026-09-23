@@ -7,7 +7,7 @@
 
 - name: Ensure nginx is running
   ansible.builtin.service:
-    name: nginx
+    name: "{{ nginx_service_name }}"
     state: started
     enabled: true
 
@@ -17,3 +17,35 @@
     dest: /etc/nginx/sites-available/default
   notify: Reload nginx
 
+- name: Check nginx version
+  ansible.builtin.command: nginx -v
+  register: nginx_version
+  changed_when: false
+
+- name: Show nginx version
+  ansible.builtin.debug:
+    msg: "{{ nginx_version.stderr }}"    
+  when: nginx_version.rc != 0
+
+- name: Show package names
+  ansible.builtin.debug:
+    msg: "Package: {{ item }}"
+  loop:
+    - htop
+    - curl
+    - nginx
+    - mc
+
+- name: Show users
+  ansible.builtin.debug:
+    msg: "User: {{ item.key }}, shell: {{ item.value.shell }}, groups: {{ item.value.groups }}"
+  loop: "{{ test_users | dict2items }}"
+
+- name: Create test users
+  ansible.builtin.user:
+    name: "{{ item.key }}"
+    shell: "{{ item.value.shell }}"
+    groups: "{{ item.value.groups }}"
+    append: true
+  loop: "{{ test_users | dict2items }}"
+      

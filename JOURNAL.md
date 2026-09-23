@@ -62,7 +62,7 @@ sudo apt update && sudo apt install terraform`
 
 5. **A Secret elmentése — EZ CSAK EGYSZER JELENIK MEG:** Létrehozás után a Proxmox mutat egy Token ID-t (pl. 'terraform@pve!tf-token') és egy Secret-et (egy UUID-szerű string). Másold ki AZONNAL és mentsd el biztonságosan — ha bezárod az ablakot, többé nem láthatod, újra kellene generálni. Ezt a két értéket egyben, '=' jellel összefűzve használja majd a Terraform tfvars fájl.
 
-6. **Token tesztelése curl-lel:**A laptopodon (nem a Proxmoxon) futtasd: curl -k -H "Authorization: PVEAPIToken=terraform@pve!tf-token=<ide-a-secret>" https://<proxmox-ip>:8006/api2/json/nodes — ha JSON válaszban látod a node adatait, a token működik és jó a jogosultság.
+6. **Token tesztelése curl-lel:** A laptopodon (nem a Proxmoxon) futtasd: curl -k -H "Authorization: PVEAPIToken=terraform@pve!tf-token=<ide-a-secret>" https://<proxmox-ip>:8006/api2/json/nodes — ha JSON válaszban látod a node adatait, a token működik és jó a jogosultság.
 
 **HIBA:** Mivel ZSH-t használok így '' kellett használni a "" helyett, előtte meg egy `set +H` parancsot.
 
@@ -192,3 +192,35 @@ roles
 ```
 
 - Figyelni a változók hol vannak defineálva, roles default változóit felülírja a group_vars azt pedig a host_vars
+
+- `vars` - a role belső változói
+
+## REGISTER
+
+### 2026-09-23 - Ansible Register
+- Lényege, hogy futás végeredményét beleteszi egy változóba, amihez egy másik task hozzáférhet
+- `when` - Feltételek használata
+- Ansible facts - Ansible-be beépített változók, amiket a gépről kérdez le. Pl:
+
+```text
+ansible_hostname
+ansible_architecture
+ansible_processor_vcpus
+ansible_memtotal_mb
+ansible_default_ipv4.address
+ansible_kernel
+```
+
+- `loop` használata, ha több mindenre vonatkozik ugyanaz a play:
+
+```text
+- name: Show package names
+  ansible.builtin.debug:
+    msg: "Package: {{ item }}"
+  loop:
+    - htop
+    - curl
+    - nginx
+```
+- `dictionary` 
+- `ansible-playbook playbooks/server.yml --tags nginx` - tagek használata, csak azok a playek fussonak amiben nginx szócska van

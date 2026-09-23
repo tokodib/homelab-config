@@ -1,2 +1,12 @@
 ---
 nginx_message: "Hello from Ansible"
+
+test_users:
+  balazs:
+    shell: /bin/bash
+    groups: sudo
+
+  automation:
+    shell: /bin/bash
+    groups: sudo
+    
