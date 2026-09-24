@@ -223,4 +223,12 @@ ansible_kernel
     - nginx
 ```
 - `dictionary` 
-- `ansible-playbook playbooks/server.yml --tags nginx` - tagek használata, csak azok a playek fussonak amiben nginx szócska van
+- `ansible-playbook playbooks/server.yml --tags nginx` - tagek használata, csak azok a playek fussonak amiben nginx szócska van `--list-tags`, `--skip-tags` és `skip-tags`
+- `--check` - próba
+- `--diff` - mi változna a fájlokban
+
+### 2026-09-24
+- `ansible.builtin.assert` - Feltételek megadása, pl ellenőrzések, számítógép konfiguráció megfelelőség ellenőrzése
+- `delegate_to` - valahol máshol hajtsa végre, pl localhoston
+- `run_once: true` - ebben a playbookban csak egyszer fusson le
+- `ansible-vault` - titkok tárolása olvashatatlan formában

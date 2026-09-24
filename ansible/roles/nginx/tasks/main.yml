@@ -1,4 +1,13 @@
 ---
+- name: Check operating system
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution == "Ubuntu"
+      - ansible_memtotal_mb >= 4096
+      - ansible_processor_vcpus >= 2
+    fail_msg: "Server does not meet the requirements"
+    success_msg: "Operating system is supported"
+
 - name: Install nginx
   ansible.builtin.apt:
     name: nginx
@@ -49,3 +58,25 @@
     append: true
   loop: "{{ test_users | dict2items }}"
       
+- name: Show remote hostname
+  ansible.builtin.command: hostname
+  register: remote_hostname
+
+- name: Show Controller hostname
+  ansible.builtin.command: hostname
+  delegate_to: localhost
+  become: false
+  run_once: true
+  register: controller_hostname
+
+
+- name: Display both
+  ansible.builtin.debug:
+    msg:
+      - "Remote: {{ remote_hostname.stdout }}"
+      - "Controller: {{ controller_hostname.stdout }}"
+      
+- name: Configure secret
+  ansible.builtin.debug:
+    msg: "{{ test_secret }}"    
+  no_log: true
