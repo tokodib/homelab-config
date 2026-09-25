@@ -1,0 +1,9 @@
+services:
+    nginx:
+        image: nginx:alpine
+        container_name: compose-test-nginx
+        restart: unless-stopped
+        environment:
+            TEST_MESSAGE: "Hello from Ansible"
+        ports: 
+          - "8080:80"

@@ -6,5 +6,5 @@
   roles:
     - common
     - docker
-    - nginx
+#    - compose_test
   
