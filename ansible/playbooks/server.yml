@@ -7,5 +7,7 @@
     - common
     - docker
 #    - compose_test
+    - dockernetworks
     - dozzle
+    - uptimekuma
   

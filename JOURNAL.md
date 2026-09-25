@@ -236,3 +236,26 @@ ansible_kernel
 ## Saját szerver felépítése
 - common fájlok telepítése
 - docker telepítése
+
+### 2026-09-25
+- `compose-test` segítséggel
+- Sorrend felállítása:
+    - ✅ Dozzle 
+    - Uptime Kuma
+    - Portainer
+    - MariaDB
+    - PhpMyAdmin
+    - PostgreSQL
+    - pgAdmin4
+    - Heimdall
+    - Gitea
+    - Grafana
+    - Prometheus
+    - Node exporter
+    - cAdvisor
+    - BlackBox exporter
+    - AlertManager
+    - Promtail
+    - Loki
+
+- `Dozzle` - role, defaults, template hozzáadás bekonfigurálása önnállóan
