@@ -1,0 +1,25 @@
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    restart: unless-stopped
+
+    env_file:
+      - postgresql.env
+
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+
+    networks:
+      - database-net
+
+    ports:
+      - "127.0.0.1:5432:5432"
+
+volumes:
+  postgresql_data:
+
+networks:
+  database-net:
+    name: database-net
+    external: true

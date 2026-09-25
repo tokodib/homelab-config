@@ -1,0 +1,28 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+
+    environment:
+      MARIADB_ROOT_PASSWORD: "{{ vault_mariadb.MARIADB_ROOT_PASSWORD}}"
+      MARIADB_DATABASE: "{{ vault_mariadb.MARIADB_DATABASE }}"
+      MARIADB_USER: "{{ vault_mariadb.MARIADB_USER }}"
+      MARIADB_PASSWORD: "{{ vault_mariadb.MARIADB_PASSWORD }}"
+
+    volumes:
+      - mariadb_mariadb_data:/var/lib/mysql
+
+    networks:
+      - database-net
+
+    ports:
+      - "127.0.0.1:3306:3306"
+    
+volumes:
+  mariadb_mariadb_data:
+
+networks:
+  database-net:
+    name: database-net
+    external: true

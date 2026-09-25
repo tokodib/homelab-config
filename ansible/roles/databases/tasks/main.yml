@@ -1,0 +1,25 @@
+---
+- name: Create Database Compose application directory
+  ansible.builtin.file:
+    path: "{{ item.compose_program_directory }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ database_app }}"
+
+- name: Deploy Database Compose file
+  ansible.builtin.template:
+    src: "{{ item.compose_template_directory }}"
+    dest: "{{ item.compose_program_directory }}/compose.yaml"
+    mode: "0644"
+  loop: "{{ database_app }}"
+
+#- name: Create Database Data Volume
+#  community.docker.docker_volume:
+#    name: heimdall_data
+#    state: present
+
+- name: Start Database Compose application
+  community.docker.docker_compose_v2:
+    project_src: "{{ item.compose_program_directory }}"
+    state: present
+  loop: "{{ database_app }}"

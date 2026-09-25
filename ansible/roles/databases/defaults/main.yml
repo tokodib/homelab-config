@@ -1,0 +1,19 @@
+---
+database_app:
+
+  - name: mariadb
+    compose_program_directory: /opt/database/mariadb
+    compose_template_directory: mariadb-compose.yaml.j2
+
+  - name: phpmyadmin
+    compose_program_directory: /opt/database/phpmyadmin
+    compose_template_directory: phpmyadmin-compose.yaml.j2
+
+  #- name: postgresql
+  #  compose_program_directory: /opt/database/postgresql
+  #  compose_template_directory: postgresql-compose.yaml.j2
+
+  #- name: pgadmin4
+  #  compose_program_directory: /opt/database/pgadmin4
+  #  compose_template_directory: pgadmin4-compose.yaml.j2
+    

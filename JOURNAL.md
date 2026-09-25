@@ -244,8 +244,8 @@ ansible_kernel
     - ✅ Uptime Kuma
     - ✅ Portainer
     - ✅ Heimdall
-    - MariaDB
-    - PhpMyAdmin
+    - ✅ MariaDB
+    - ✅ PhpMyAdmin
     - PostgreSQL
     - pgAdmin4
     - Gitea
@@ -258,4 +258,29 @@ ansible_kernel
     - Promtail
     - Loki
 
-- `Dozzle, Uptime Kuma, Docker Networks, Portainer` - role, defaults, template hozzáadás bekonfigurálása önnállóan
+- `Dozzle, Uptime Kuma, Docker Networks, Portainer, Heimdall` - role, defaults, template hozzáadás bekonfigurálása önnállóan
+
+## 2026-09-25 – Database role: MariaDB + phpMyAdmin
+
+Elkészült a `databases` Ansible role első része.
+
+### Amit megvalósítottam
+
+* Létrehoztam a `databases` role-t az adatbázisokhoz kapcsolódó Docker szolgáltatások kezelésére.
+* A role-t úgy alakítottam ki, hogy az alkalmazásokat egy dictionary-ket tartalmazó listából lehessen kezelni.
+* Minden alkalmazás saját Compose projektkönyvtárral és saját Compose template-tel rendelkezik.
+* A MariaDB és a phpMyAdmin külön Docker Compose projektként került telepítésre.
+* Mindkét szolgáltatást a közös, külső `database-net` Docker hálózathoz csatlakoztattam.
+* A MariaDB adatainak megőrzéséhez perzisztens Docker named volume-t hoztam létre.
+* Az érzékeny környezeti változókat Ansible Vault segítségével kezeltem.
+* A szükséges `.env` fájlokat a Vaultban tárolt változókból generáltam, így a jelszavak nem kerülnek a Compose template-ekbe.
+* Ellenőriztem, hogy a MariaDB és a phpMyAdmin is megfelelően működik.
+
+### Amit tanultam
+
+Ez volt az első nagyobb példa, ahol az Ansible-t adatvezérelt módon használtam. Az egyes alkalmazásokhoz nem kellett külön-külön taskokat létrehoznom, hanem egy dictionary-ket tartalmazó listában definiáltam őket, majd ugyanazokat a taskokat loop segítségével futtattam végig rajtuk.
+
+Az Ansible Vault és a Docker Compose együttes használatát is gyakoroltam. A titkos adatok nem kerülnek a Git repositoryba olvasható formában, miközben a Compose template-ek továbbra is verziókövethetők.
+
+A `databases` role később PostgreSQL-lel és pgAdmin4-gyel fog bővülni.
+
