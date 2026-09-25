@@ -1,0 +1,18 @@
+common_packages:
+  - curl
+  - wget
+  - mc
+  - htop
+  - btop
+  - ncdu
+  - vim
+  - git
+  - unzip
+  - tree
+  - jq
+  - net-tools
+  - dnsutils
+  - iputils-ping
+  - ca-certificates
+  - gnupg
+  - lsb-release

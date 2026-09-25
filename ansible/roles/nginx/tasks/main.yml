@@ -1,12 +1,12 @@
 ---
-- name: Check operating system
-  ansible.builtin.assert:
-    that:
-      - ansible_distribution == "Ubuntu"
-      - ansible_memtotal_mb >= 4096
-      - ansible_processor_vcpus >= 2
-    fail_msg: "Server does not meet the requirements"
-    success_msg: "Operating system is supported"
+#- name: Check operating system
+#  ansible.builtin.assert:
+#    that:
+#      - ansible_distribution == "Ubuntu"
+#      - ansible_memtotal_mb >= 4096
+#      - ansible_processor_vcpus >= 2
+#    fail_msg: "Server does not meet the requirements"
+#    success_msg: "Operating system is supported"
 
 - name: Install nginx
   ansible.builtin.apt:
@@ -20,63 +20,63 @@
     state: started
     enabled: true
 
-- name: Configure nginx
-  ansible.builtin.template:
-    src: nginx-default.conf.j2
-    dest: /etc/nginx/sites-available/default
-  notify: Reload nginx
+#- name: Configure nginx
+#  ansible.builtin.template:
+#    src: nginx-default.conf.j2
+#    dest: /etc/nginx/sites-available/default
+#  notify: Reload nginx
 
-- name: Check nginx version
-  ansible.builtin.command: nginx -v
-  register: nginx_version
-  changed_when: false
+#- name: Check nginx version
+#  ansible.builtin.command: nginx -v
+#  register: nginx_version
+#  changed_when: false
 
-- name: Show nginx version
-  ansible.builtin.debug:
-    msg: "{{ nginx_version.stderr }}"    
-  when: nginx_version.rc != 0
+#- name: Show nginx version
+#  ansible.builtin.debug:
+#    msg: "{{ nginx_version.stderr }}"    
+#  when: nginx_version.rc != 0
 
-- name: Show package names
-  ansible.builtin.debug:
-    msg: "Package: {{ item }}"
-  loop:
-    - htop
-    - curl
-    - nginx
-    - mc
+#- name: Show package names
+#  ansible.builtin.debug:
+#    msg: "Package: {{ item }}"
+#  loop:
+#    - htop
+#    - curl
+#    - nginx
+#    - mc
 
-- name: Show users
-  ansible.builtin.debug:
-    msg: "User: {{ item.key }}, shell: {{ item.value.shell }}, groups: {{ item.value.groups }}"
-  loop: "{{ test_users | dict2items }}"
+#- name: Show users
+#  ansible.builtin.debug:
+#    msg: "User: {{ item.key }}, shell: {{ item.value.shell }}, groups: {{ item.value.groups }}"
+#  loop: "{{ test_users | dict2items }}"
 
-- name: Create test users
-  ansible.builtin.user:
-    name: "{{ item.key }}"
-    shell: "{{ item.value.shell }}"
-    groups: "{{ item.value.groups }}"
-    append: true
-  loop: "{{ test_users | dict2items }}"
+#- name: Create test users
+#  ansible.builtin.user:
+#    name: "{{ item.key }}"
+#    shell: "{{ item.value.shell }}"
+#    groups: "{{ item.value.groups }}"
+#    append: true
+#  loop: "{{ test_users | dict2items }}"
       
-- name: Show remote hostname
-  ansible.builtin.command: hostname
-  register: remote_hostname
+#- name: Show remote hostname
+#  ansible.builtin.command: hostname
+#  register: remote_hostname
 
-- name: Show Controller hostname
-  ansible.builtin.command: hostname
-  delegate_to: localhost
-  become: false
-  run_once: true
-  register: controller_hostname
+#- name: Show Controller hostname
+#  ansible.builtin.command: hostname
+#  delegate_to: localhost
+#  become: false
+#  run_once: true
+#  register: controller_hostname
 
 
-- name: Display both
-  ansible.builtin.debug:
-    msg:
-      - "Remote: {{ remote_hostname.stdout }}"
-      - "Controller: {{ controller_hostname.stdout }}"
+#- name: Display both
+#  ansible.builtin.debug:
+#    msg:
+#      - "Remote: {{ remote_hostname.stdout }}"
+#      - "Controller: {{ controller_hostname.stdout }}"
       
-- name: Configure secret
-  ansible.builtin.debug:
-    msg: "{{ test_secret }}"    
-  no_log: true
+#- name: Configure secret
+#  ansible.builtin.debug:
+#    msg: "{{ test_secret }}"    
+#  no_log: true

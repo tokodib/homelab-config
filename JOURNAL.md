@@ -232,3 +232,7 @@ ansible_kernel
 - `delegate_to` - valahol máshol hajtsa végre, pl localhoston
 - `run_once: true` - ebben a playbookban csak egyszer fusson le
 - `ansible-vault` - titkok tárolása olvashatatlan formában
+
+## Saját szerver felépítése
+- common fájlok telepítése
+- docker telepítése
