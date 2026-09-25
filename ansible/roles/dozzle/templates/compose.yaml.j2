@@ -1,0 +1,24 @@
+services:
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - dozzle_data:/data
+    ports:
+      - 8888:8080
+
+    restart: unless-stopped
+    
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true
+    name: monitoring
+
+volumes:
+  dozzle_data:
+    name: dozzle_data
+    external: true

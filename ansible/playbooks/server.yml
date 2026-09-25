@@ -7,4 +7,5 @@
     - common
     - docker
 #    - compose_test
+    - dozzle
   
