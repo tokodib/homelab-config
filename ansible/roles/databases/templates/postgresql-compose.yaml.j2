@@ -4,8 +4,10 @@ services:
     container_name: postgresql
     restart: unless-stopped
 
-    env_file:
-      - postgresql.env
+    environment:
+      POSTGRES_DB: "{{ vault_postgresql.POSTGRES_DB }}"
+      POSTGRES_USER: "{{ vault_postgresql.POSTGRES_USER }}"
+      POSTGRES_PASSWORD: "{{ vault_postgresql.POSTGRES_PASSWORD }}"
 
     volumes:
       - postgresql_data:/var/lib/postgresql

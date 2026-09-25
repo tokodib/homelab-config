@@ -282,5 +282,5 @@ Ez volt az első nagyobb példa, ahol az Ansible-t adatvezérelt módon használ
 
 Az Ansible Vault és a Docker Compose együttes használatát is gyakoroltam. A titkos adatok nem kerülnek a Git repositoryba olvasható formában, miközben a Compose template-ek továbbra is verziókövethetők.
 
-A `databases` role később PostgreSQL-lel és pgAdmin4-gyel fog bővülni.
+A `databases` role később PostgreSQL-lel és pgAdmin4-gyel ki lett bővítve.
 

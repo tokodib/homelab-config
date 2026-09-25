@@ -4,9 +4,9 @@ services:
     container_name: pgadmin
     restart: unless-stopped
 
-    env_file:
-      - pgadmin.env
-
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "{{ vault_pgadmin4.PGADMIN_DEFAULT_EMAIL }}"
+      PGADMIN_DEFAULT_PASSWORD: "{{ vault_pgadmin4.PGADMIN_DEFAULT_PASSWORD }}"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
