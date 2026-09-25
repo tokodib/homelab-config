@@ -1,0 +1,22 @@
+---
+- name: Create Portainer Compose application directory
+  ansible.builtin.file:
+    path: "{{ compose_program_directory }}"
+    state: directory
+    mode: "0755"
+
+- name: Deploy PortainerCompose file
+  ansible.builtin.template:
+    src: compose.yaml.j2
+    dest: "{{ compose_program_directory }}/compose.yaml"
+    mode: "0644"
+
+- name: Create Portainer Data Volume
+  community.docker.docker_volume:
+    name: portainer_data
+    state: present
+
+- name: Start Portainer Compose application
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_program_directory }}"
+    state: present
