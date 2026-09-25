@@ -241,13 +241,13 @@ ansible_kernel
 - `compose-test` segítséggel
 - Sorrend felállítása:
     - ✅ Dozzle 
-    - Uptime Kuma
-    - Portainer
+    - ✅ Uptime Kuma
+    - ✅ Portainer
+    - ✅ Heimdall
     - MariaDB
     - PhpMyAdmin
     - PostgreSQL
     - pgAdmin4
-    - Heimdall
     - Gitea
     - Grafana
     - Prometheus
@@ -258,4 +258,4 @@ ansible_kernel
     - Promtail
     - Loki
 
-- `Dozzle` - role, defaults, template hozzáadás bekonfigurálása önnállóan
+- `Dozzle, Uptime Kuma, Docker Networks, Portainer` - role, defaults, template hozzáadás bekonfigurálása önnállóan

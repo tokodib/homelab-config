@@ -1,0 +1,28 @@
+---
+services:
+  heimdall:
+    image: linuxserver/heimdall:latest
+    container_name: heimdall
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Budapest
+    volumes:
+      - heimdall_data:/config
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true
+    name: monitoring    
+
+volumes:
+  heimdall_data:
+    name: heimdall_data
+    external: true

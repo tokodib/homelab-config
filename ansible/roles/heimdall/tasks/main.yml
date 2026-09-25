@@ -1,0 +1,22 @@
+---
+- name: Create Heimdall Compose application directory
+  ansible.builtin.file:
+    path: "{{ compose_program_directory }}"
+    state: directory
+    mode: "0755"
+
+- name: Deploy Heimdall Compose file
+  ansible.builtin.template:
+    src: compose.yaml.j2
+    dest: "{{ compose_program_directory }}/compose.yaml"
+    mode: "0644"
+
+- name: Create Heimdall Data Volume
+  community.docker.docker_volume:
+    name: heimdall_data
+    state: present
+
+- name: Start Heimdall Compose application
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_program_directory }}"
+    state: present
