@@ -289,5 +289,12 @@ A `databases` role később PostgreSQL-lel és pgAdmin4-gyel ki lett bővítve.
 - Probléma adódott amikor a `webmin-setup-repo.sh`-t futtatni kellett, mert akkor script kér egy Y gombnyomást a telepítéshez, így használni kellett a cmd sorban a `--force` kapcsolót, hogy ne kérje.
 - Feltelepült, de mivel minden felhasználó ssh kulcson jelszó nélkül csatlakozik a host-ra így a belépés lehetetlenné vált. Ezért az ansible létrehoz egy `webminadmin` felhasználót. Jelszava `ansible vault` fájlban tárolódik
 - Egy gond felmerült a `webmin-setup-repo.sh` mindig lefut, függetlenül attól hogy már a webmin repók defineálva vannak, ezért be kellett tenni egy repó ellenőrzést a taskba, hogy ha létezik a repó, akkor ne futtassa újra scriptet, ezzel indepotens marad az ansible taskuk.
-- Megtanultam, hogy hogyan adjunk át jelszavakat a linux jelszókezelőnek és hogyan tegyük azt fixxé, hogy ne generáljon új hash minden lekérdezésnél. `salt` hozzáadása. Ez is mindig lefutott amikor újrahívtuk a playbookot. 
+- Megtanultam, hogy hogyan adjunk át jelszavakat a linux jelszókezelőnek és hogyan tegyük azt fixxé, hogy ne generáljon új hasht minden lekérdezésnél. `salt` hozzáadása. Ez is mindig lefutott amikor újrahívtuk a playbookot. 
 
+### 2029-09-27 Gitea
+- Különálló `gitea` role létrehozása
+- Ansible vault használata, mellyel létrehozzuk a `gitea.env` fájlt
+- Az .env fájl beintegrálása a compose fájl mellé
+- A vault-ból használjuk a postgresql-hez való hozzáférést
+- Taskból készítsük el a gitea felhasználóját és adatbázissát, aminek a jelszavát, adatbázisnevét szintén vaultból olvassuk ki.
+- A common role-ba hozzá kellett adni a `python3-psycopg2` csomagot, hogy a `community.postgresql` utasítás kommunikálni tudjon a PostgreSQL serverrel.

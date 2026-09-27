@@ -1,0 +1,29 @@
+services:
+  gitea:
+    image: docker.gitea.com/gitea:latest
+    container_name: gitea
+
+    env_file:
+      - gitea.env
+
+    restart: unless-stopped
+    
+    networks:
+      - database-net
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+
+networks:
+  database-net:
+    name: database-net
+    external: true
+
+#MANUALLY NEED CREATING : user, password, database
+#Login in container: docker exec -it postgresql psql -U postgres
+#SQL: CREATE USER gitea WITH PASSWORD 'gitea';
+#     CREATE DATABASE gitea OWNER gitea;

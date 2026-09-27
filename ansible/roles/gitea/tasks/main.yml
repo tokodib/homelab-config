@@ -1,0 +1,51 @@
+---
+- name: Test PostgreSQL connection
+  community.postgresql.postgresql_ping:
+    login_host: 127.0.0.1
+    login_port: 5432
+    login_user: "{{ vault_postgresql.POSTGRES_USER }}"
+    login_password: "{{ vault_postgresql.POSTGRES_PASSWORD }}"
+
+- name: Create Gitea postgresql user
+  community.postgresql.postgresql_user:
+    name: "{{ vault_gitea.USERNAME }}"
+    password: "{{ vault_gitea.PASSWORD }}"
+    state: present
+    login_host: 127.0.0.1
+    login_port: 5432
+    login_user: "{{ vault_postgresql.POSTGRES_USER }}"
+    login_password: "{{ vault_postgresql.POSTGRES_PASSWORD }}"
+
+- name: Create Gitea postgresql database
+  community.postgresql.postgresql_db:
+    name: "{{ vault_gitea.DATABASE }}"
+    owner: "{{ vault_gitea.USERNAME }}"
+    state: present
+    login_host: 127.0.0.1
+    login_port: 5432
+    login_user: "{{ vault_postgresql.POSTGRES_USER }}"
+    login_password: "{{ vault_postgresql.POSTGRES_PASSWORD }}"
+
+- name: Create Compose application directory
+  ansible.builtin.file:
+    path: "{{ compose_gitea_directory }}"
+    state: directory
+    mode: "0755"
+
+- name: Deploy Compose file
+  ansible.builtin.template:
+    src: compose.yaml.j2
+    dest: "{{ compose_gitea_directory }}/compose.yaml"
+    mode: "0644"
+
+- name: Deploy env file
+  ansible.builtin.template:
+    src: gitea.env.j2
+    dest: "{{ compose_gitea_directory }}/gitea.env"
+    mode: "0600"
+
+- name: Start Compose application
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_gitea_directory }}"
+    state: present
+
