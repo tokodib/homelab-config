@@ -246,9 +246,9 @@ ansible_kernel
     - ✅ Heimdall
     - ✅ MariaDB
     - ✅ PhpMyAdmin
-    - PostgreSQL
-    - pgAdmin4
-    - Gitea
+    - ✅ PostgreSQL
+    - ✅ pgAdmin4
+    - ✅ Gitea
     - Grafana
     - Prometheus
     - Node exporter
@@ -257,6 +257,7 @@ ansible_kernel
     - AlertManager
     - Promtail
     - Loki
+    - ✅ Webmin (nativ)
 
 - `Dozzle, Uptime Kuma, Docker Networks, Portainer, Heimdall` - role, defaults, template hozzáadás bekonfigurálása önnállóan
 
