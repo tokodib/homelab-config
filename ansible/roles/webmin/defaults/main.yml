@@ -1,0 +1,3 @@
+webmin_directory: /opt/webmin
+
+webmin_admin_user: webminadmin

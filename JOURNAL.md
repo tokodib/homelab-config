@@ -284,3 +284,10 @@ Az Ansible Vault és a Docker Compose együttes használatát is gyakoroltam. A 
 
 A `databases` role később PostgreSQL-lel és pgAdmin4-gyel ki lett bővítve.
 
+### 2029-09-26 Webmin
+- Webmint natívan kell telepíteni, mert hozzá kell, hogy férhessen a számítógép erőforrásaihoz.
+- Probléma adódott amikor a `webmin-setup-repo.sh`-t futtatni kellett, mert akkor script kér egy Y gombnyomást a telepítéshez, így használni kellett a cmd sorban a `--force` kapcsolót, hogy ne kérje.
+- Feltelepült, de mivel minden felhasználó ssh kulcson jelszó nélkül csatlakozik a host-ra így a belépés lehetetlenné vált. Ezért az ansible létrehoz egy `webminadmin` felhasználót. Jelszava `ansible vault` fájlban tárolódik
+- Egy gond felmerült a `webmin-setup-repo.sh` mindig lefut, függetlenül attól hogy már a webmin repók defineálva vannak, ezért be kellett tenni egy repó ellenőrzést a taskba, hogy ha létezik a repó, akkor ne futtassa újra scriptet, ezzel indepotens marad az ansible taskuk.
+- Megtanultam, hogy hogyan adjunk át jelszavakat a linux jelszókezelőnek és hogyan tegyük azt fixxé, hogy ne generáljon új hash minden lekérdezésnél. `salt` hozzáadása. Ez is mindig lefutott amikor újrahívtuk a playbookot. 
+
