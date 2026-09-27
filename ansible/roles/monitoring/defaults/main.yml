@@ -1,0 +1,47 @@
+---
+monitoring_app:
+
+  - name: prometheus
+    compose_program_directory: /opt/monitoring/prometheus
+    compose_template_file: prometheus-compose.yaml.j2
+    config_file: prometheus.yml.j2
+    config_file_target: /opt/prometheus/prometheus.yml
+    alert_rules_file: prometheus_alert_rules_yml.j2
+    alert_rules_target: /opt/prometheus/alert_rules.yml
+        
+  - name: grafana
+    compose_program_directory: /opt/monitoring/grafana
+    compose_template_file: grafana-compose.yaml.j2
+
+  - name: alertmanager
+    compose_program_directory: /opt/monitoring/alertmanager
+    compose_template_file: alertmanager-compose.yaml.j2
+    config_file: alertmanager.yml.j2
+    config_file_target: /opt/monitoring/alertamanager/config.yml
+
+  - name: nodeexporter
+    compose_program_directory: /opt/monitoring/nodeexporter
+    compose_template_file: nodeexporter-compose.yaml.j2
+
+  - name: blackbox
+    compose_program_directory: /opt/monitoring/blackbox
+    compose_template_file: nodeexporter-compose.yaml.j2
+    config_file: blackbox.yml.j2
+    config_file_target: /opt/monitoring/blackbox/blackbox.yml
+
+  - name: loki
+    compose_program_directory: /opt/monitoring/loki
+    compose_template_file: loki-compose.yaml.j2
+
+  - name: promtail
+    compose_program_directory: /opt/monitoring/promtail
+    compose_template_file: promtail-compose.yaml.j2
+    config_file: promtail-config.yml.j2
+    config_file_target: /opt/monitoring/promtail/config.yml
+
+  - name: cadvisor
+    compose_program_directory: /opt/monitoring/cadvisor
+    compose_template_file: cadvisor-compose.yaml.j2
+
+
+
