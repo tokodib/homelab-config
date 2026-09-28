@@ -5,14 +5,14 @@
 
   roles:
     - common
-#    - docker
+    - docker
 #    - compose_test
     - dockernetworks
-#    - dozzle
-#    - uptimekuma
-#    - portainer
-#    - heimdall
-#    - databases
-#    - webmin
-#    - gitea
+    - dozzle
+    - uptimekuma
+    - portainer
+    - heimdall
+    - databases
+    - webmin
+    - gitea
     - monitoring

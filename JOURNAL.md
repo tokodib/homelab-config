@@ -249,14 +249,14 @@ ansible_kernel
     - ✅ PostgreSQL
     - ✅ pgAdmin4
     - ✅ Gitea
-    - Grafana
-    - Prometheus
-    - Node exporter
-    - cAdvisor
-    - BlackBox exporter
-    - AlertManager
-    - Promtail
-    - Loki
+    - ✅ Grafana
+    - ✅ Prometheus
+    - ✅ Node exporter
+    - ✅ cAdvisor
+    - ✅ BlackBox exporter
+    - ✅ AlertManager
+    - ✅ Promtail
+    - ✅ Loki
     - ✅ Webmin (nativ)
 
 - `Dozzle, Uptime Kuma, Docker Networks, Portainer, Heimdall` - role, defaults, template hozzáadás bekonfigurálása önnállóan
@@ -300,31 +300,23 @@ A `databases` role később PostgreSQL-lel és pgAdmin4-gyel ki lett bővítve.
 - Taskból készítsük el a gitea felhasználóját és adatbázissát, aminek a jelszavát, adatbázisnevét szintén vaultból olvassuk ki.
 - A common role-ba hozzá kellett adni a `python3-psycopg2` csomagot, hogy a `community.postgresql` utasítás kommunikálni tudjon a PostgreSQL serverrel.
 
-### 2026-09-28 – Monitoring role kialakítása, befejezése, Prometheus konfiguráció javítása
+### 2026-09-28 – Ansible Monitoring role kialakítása, befejezése, Prometheus konfiguráció javítása és teljes rebuid test
 
-Ma tovább dolgoztam az Ansible monitoring role-on.
+Ma gyakorlatilag lezártam az Ansible konfigurációs részt, és elvégeztem egy teljes rebuild tesztet.
 
-A monitoring szolgáltatások konfigurációját egy közös, adatvezérelt monitoring_app listából kezelem. A role opcionális konfigurációs elemeket is támogat, ezért a konfigurációs könyvtár létrehozásánál hozzáadtam az alábbi feltételt:
+Monitoring role – Prometheus javítása
 
-when: item.config_directory is defined
-
-Erre azért volt szükség, mert nem minden monitoring alkalmazás rendelkezik külön konfigurációs könyvtárral.
-
-Prometheus probléma
-
-A monitoring stack első telepítése után a Prometheus konténer folyamatosan újraindult.
-
-A log alapján a Prometheus nem találta a konfigurációs fájlt:
+A monitoring role fejlesztése során a Prometheus konténer először nem tudott elindulni, mert nem találta a konfigurációs fájlt:
 
 open /etc/prometheus/prometheus.yml: no such file or directory
 
-A probléma oka az volt, hogy a Docker Compose a következő könyvtárat mountolta:
+A hiba oka az volt, hogy a Docker Compose ezt a könyvtárat mountolta:
 
 ./prometheus:/etc/prometheus
 
-miközben az Ansible eredetileg nem ugyanabba a könyvtárstruktúrába helyezte a prometheus.yml fájlt.
+miközben az Ansible nem ugyanabba a könyvtárstruktúrába helyezte a prometheus.yml fájlt.
 
-A korábbi, működő Docker konfigurációt követve visszaállítottam a megfelelő struktúrát:
+A működő korábbi Docker konfiguráció struktúráját követve módosítottam az Ansible role-t:
 
 /opt/monitoring/prometheus/
 ├── compose.yaml
@@ -332,39 +324,103 @@ A korábbi, működő Docker konfigurációt követve visszaállítottam a megfe
     ├── prometheus.yml
     └── alert_rules.yml
 
-Ehhez az Ansible változók között a Prometheus számára megadtam:
+Ehhez a konfigurációs könyvtár létrehozását feltételhez kötöttem:
 
-config_directory: prometheus
+when: item.config_directory is defined
 
-és a konfigurációs fájl célját is ehhez igazítottam.
+Így csak azoknál a monitoring alkalmazásoknál jön létre külön konfigurációs könyvtár, amelyeknél ez szükséges.
 
-Ellenőrzés
-
-A módosítás után újra lefuttattam az egész playbookot.
-
-Az első futtatás után a Prometheus már megfelelően létrejött, a második futtatás pedig:
-
-ok=9
-changed=0
-unreachable=0
-failed=0
-
-eredményt adott.
-
-A Prometheus logja alapján a konfiguráció sikeresen betöltődött:
+A javítás után a Prometheus konfigurációját sikeresen betöltötte:
 
 Completed loading of configuration file
 
-majd:
+és:
 
 Server is ready to receive web requests.
+Ansible idempotencia
 
-Ezzel a Prometheus konfigurációs problémája megoldódott.
+A módosítás után többször is lefuttattam a teljes Ansible playbookot.
 
-Tanulság
+A második futtatás eredménye:
 
-Ma azt gyakoroltam, hogy az Ansible-ben nem elég önmagában a fájlokat létrehozni. A konfigurációs fájloknak, a Docker Compose bind mountjainak és a konténeren belüli elérési utaknak összhangban kell lenniük.
+ok=48
+changed=0
+unreachable=0
+failed=0
+skipped=0
+rescued=0
+ignored=0
 
-A hibakeresés során megnéztem a konténer logját, összevetettem a host oldali könyvtárstruktúrát a Compose konfigurációval, majd az Ansible role-t úgy módosítottam, hogy a szükséges könyvtár automatikusan létrejöjjön.
+Ez igazolta, hogy a konfiguráció idempotens: ha a szerver már a kívánt állapotban van, az Ansible nem végez felesleges módosításokat.
 
-A monitoring role jelenleg idempotens: ismételt futtatáskor nem végez felesleges módosításokat.
+# Terraform destroy és rebuild teszt
+
+Ezután elvégeztem egy teljes újraépítési tesztet.
+
+Először a következő paranccsal ellenőriztem, hogy mit törölne a Terraform:
+
+terraform plan -destroy
+
+A terv szerint kizárólag a Terraform által kezelt homelab-server-01, VM ID 111 került volna törlésre:
+
+Plan: 0 to add, 0 to change, 1 to destroy.
+
+Ezután kiadtam:
+
+terraform destroy
+
+A VM törlése után Terraformmal újra létrehoztam:
+
+terraform apply
+
+Az új VM létrehozása után az SSH kapcsolatnál egy known_hosts probléma jelentkezett.
+
+Mivel az új VM ugyanazt az IP-címet használta, mint a korábbi VM (192.168.1.111), az SSH kliens még a régi gép fingerprintjét tárolta. Az új VM viszont más SSH host fingerprinttel rendelkezett.
+
+A régi bejegyzést eltávolítottam, majd újra csatlakoztam és elfogadtam az új fingerprintet.
+
+Ez egy fontos tanulság volt a VM-ek újraépítésével kapcsolatban: azonos IP-cím mellett az új gép SSH host fingerprintje megváltozik, ezért az SSH kliens biztonsági okból figyelmeztet.
+
+Teljes Ansible rebuild
+
+Az újonnan létrehozott, gyakorlatilag üres VM-en ezután újra lefuttattam a teljes Ansible konfigurációt.
+
+Az első futtatás eredménye:
+
+ok=48
+changed=42
+unreachable=0
+failed=0
+skipped=0
+rescued=0
+ignored=0
+
+Az Ansible sikeresen újratelepítette és konfigurálta a szükséges környezetet. A teljes terraform kiépítés, kézi ssh fingerprint újradefineálás, ansible telepítések és configolások megközelítőleg összesen 14 percet vettek igénybe és van egy használható szerverünk.
+
+Ez azért fontos mérföldkő, mert a szerver teljes konfigurációja nem kézi beállításokból áll, hanem Terraform és Ansible segítségével újraépíthető.
+
+Mai tanulságok
+
+A mai nap legfontosabb eredménye, hogy a projekt infrastruktúrája már nem csak működő állapotban van, hanem újraépíthető is.
+
+A folyamat:
+
+Terraform
+    ↓
+Proxmox VM
+    ↓
+Ansible
+    ↓
+Docker
+    ↓
+Docker networks
+    ↓
+Docker Compose services
+    ↓
+adatbázisok + Gitea + monitoring
+
+A rebuild során 48 Ansible task futott le, amelyek közül 42 ténylegesen módosította az új szervert. A korábbi szerveren végzett második futtatás pedig 48 task mellett changed=0 eredményt adott.
+
+Ezzel sikerült gyakorlatban is igazolni az Ansible konfiguráció idempotenciáját és a Terraform + Ansible alapú infrastruktúra újraépíthetőségét.
+
+Az Ansible konfigurációs részét ezzel lezártnak tekintem.
