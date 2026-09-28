@@ -1,25 +1,50 @@
 ---
-- name: Create Database Compose application directory
+- name: Create Monitoring Compose application directory
   ansible.builtin.file:
     path: "{{ item.compose_program_directory }}"
     state: directory
     mode: "0755"
-  loop: "{{ database_app }}"
+  loop: "{{ monitoring_app }}"
 
-- name: Deploy Database Compose file
+- name: Create Application Config directory
+  ansible.builtin.file:
+    path: "{{ item.compose_program_directory }}/{{ item.config_directory }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ monitoring_app }}"
+  when: item.config_directory is defined
+
+
+- name: Deploy Monitoring Compose file
   ansible.builtin.template:
-    src: "{{ item.compose_template_directory }}"
+    src: "{{ item.compose_template_file }}"
     dest: "{{ item.compose_program_directory }}/compose.yaml"
     mode: "0644"
-  loop: "{{ database_app }}"
+  loop: "{{ monitoring_app }}"
 
 #- name: Create Database Data Volume
 #  community.docker.docker_volume:
 #    name: heimdall_data
 #    state: present
 
-- name: Start Database Compose application
+- name: Deploy config file
+  ansible.builtin.template:
+    src: "{{ item.config_file }}"
+    dest: "{{ item.config_file_target }}"
+    mode: "0644"
+  loop: "{{ monitoring_app }}"
+  when: item.config_file is defined
+
+- name: Deploy alert rules file
+  ansible.builtin.template:
+    src: "{{ item.alert_rules_file }}"
+    dest: "{{ item.alert_rules_target }}"
+    mode: "0644"
+  loop: "{{ monitoring_app }}"
+  when: item.alert_rules_file is defined
+
+- name: Start Monitoring Compose application
   community.docker.docker_compose_v2:
     project_src: "{{ item.compose_program_directory }}"
     state: present
-  loop: "{{ database_app }}"
+  loop: "{{ monitoring_app }}"

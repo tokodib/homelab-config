@@ -12,6 +12,7 @@
 #    - uptimekuma
 #    - portainer
 #    - heimdall
-    - databases
+#    - databases
 #    - webmin
-    - gitea
+#    - gitea
+    - monitoring

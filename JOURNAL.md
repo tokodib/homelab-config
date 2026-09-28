@@ -299,3 +299,72 @@ A `databases` role később PostgreSQL-lel és pgAdmin4-gyel ki lett bővítve.
 - A vault-ból használjuk a postgresql-hez való hozzáférést
 - Taskból készítsük el a gitea felhasználóját és adatbázissát, aminek a jelszavát, adatbázisnevét szintén vaultból olvassuk ki.
 - A common role-ba hozzá kellett adni a `python3-psycopg2` csomagot, hogy a `community.postgresql` utasítás kommunikálni tudjon a PostgreSQL serverrel.
+
+### 2026-09-28 – Monitoring role kialakítása, befejezése, Prometheus konfiguráció javítása
+
+Ma tovább dolgoztam az Ansible monitoring role-on.
+
+A monitoring szolgáltatások konfigurációját egy közös, adatvezérelt monitoring_app listából kezelem. A role opcionális konfigurációs elemeket is támogat, ezért a konfigurációs könyvtár létrehozásánál hozzáadtam az alábbi feltételt:
+
+when: item.config_directory is defined
+
+Erre azért volt szükség, mert nem minden monitoring alkalmazás rendelkezik külön konfigurációs könyvtárral.
+
+Prometheus probléma
+
+A monitoring stack első telepítése után a Prometheus konténer folyamatosan újraindult.
+
+A log alapján a Prometheus nem találta a konfigurációs fájlt:
+
+open /etc/prometheus/prometheus.yml: no such file or directory
+
+A probléma oka az volt, hogy a Docker Compose a következő könyvtárat mountolta:
+
+./prometheus:/etc/prometheus
+
+miközben az Ansible eredetileg nem ugyanabba a könyvtárstruktúrába helyezte a prometheus.yml fájlt.
+
+A korábbi, működő Docker konfigurációt követve visszaállítottam a megfelelő struktúrát:
+
+/opt/monitoring/prometheus/
+├── compose.yaml
+└── prometheus/
+    ├── prometheus.yml
+    └── alert_rules.yml
+
+Ehhez az Ansible változók között a Prometheus számára megadtam:
+
+config_directory: prometheus
+
+és a konfigurációs fájl célját is ehhez igazítottam.
+
+Ellenőrzés
+
+A módosítás után újra lefuttattam az egész playbookot.
+
+Az első futtatás után a Prometheus már megfelelően létrejött, a második futtatás pedig:
+
+ok=9
+changed=0
+unreachable=0
+failed=0
+
+eredményt adott.
+
+A Prometheus logja alapján a konfiguráció sikeresen betöltődött:
+
+Completed loading of configuration file
+
+majd:
+
+Server is ready to receive web requests.
+
+Ezzel a Prometheus konfigurációs problémája megoldódott.
+
+Tanulság
+
+Ma azt gyakoroltam, hogy az Ansible-ben nem elég önmagában a fájlokat létrehozni. A konfigurációs fájloknak, a Docker Compose bind mountjainak és a konténeren belüli elérési utaknak összhangban kell lenniük.
+
+A hibakeresés során megnéztem a konténer logját, összevetettem a host oldali könyvtárstruktúrát a Compose konfigurációval, majd az Ansible role-t úgy módosítottam, hogy a szükséges könyvtár automatikusan létrejöjjön.
+
+A monitoring role jelenleg idempotens: ismételt futtatáskor nem végez felesleges módosításokat.
